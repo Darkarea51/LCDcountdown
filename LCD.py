@@ -22,29 +22,32 @@ lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_c
 lcd.message('countdown is Booting up...')
 time.sleep(5.0)
 
-Upcoming = requests.get("https://api.spacexdata.com/v3/launches/upcoming").text
-json_Upcoming=json.loads(Upcoming)
+while True: 
 
-now = datetime.datetime.now()
+    Upcoming = requests.get("https://api.spacexdata.com/v3/launches/upcoming").text
+    json_Upcoming=json.loads(Upcoming)
 
-liftoff = str(now)
-countdowntimer = str(json_Upcoming[0]["launch_date_local"])
-s = countdowntimer.split('T')
-a = s[0].split('-')
-t = s[1].split('-')
-u = t[0].split(',')
-v = u[0].split(':')
-launch = a + v
-launchtime = []
-for e in launch:
-    launchtime.append(int (e))
-    
-launchtime[3]=launchtime[3]-4   
-launchdatetime = datetime.datetime(*launchtime)
-looplaunch = launchdatetime-now
+    now = datetime.datetime.now()
 
-print (str(looplaunch) + " Until Launch!")
+    liftoff = str(now)
+    countdowntimer = str(json_Upcoming[0]["launch_date_local"])
+    s = countdowntimer.split('T')
+    a = s[0].split('-')
+    t = s[1].split('-')
+    u = t[0].split(',')
+    v = u[0].split(':')
+    launch = a + v
+    launchtime = []
+    for e in launch:
+        launchtime.append(int (e))
 
-lcd.message(str(looplaunch) + " Until Launch!")
+    launchtime[3]=launchtime[3]-4   
+    launchdatetime = datetime.datetime(*launchtime)
+    looplaunch = launchdatetime-now
+
+    print (str(looplaunch) + " Until Launch!")
+
+    lcd.message(str(looplaunch) + " Until Launch!")
+    time.sleep(60)
 
 
